@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import it.polito.tdp.extflightdelays.model.Airline;
 import it.polito.tdp.extflightdelays.model.Airport;
@@ -114,5 +115,35 @@ public class ExtFlightDelaysDAO {
 			System.out.println("Errore connessione al database");
 			throw new RuntimeException("Error Connection Database");
 		}
+	}
+
+	public int getPeso(Map<String, String> mappaStati, String s1, String s2) {
+
+		String sql = "SELECT COUNT(DISTINCT(TAIL_NUMBER)) AS conta " + 
+				"FROM flights AS f, airports AS a1, airports AS a2 " + 
+				"WHERE a1.STATE=? AND a2.STATE=? AND a1.ID=f.ORIGIN_AIRPORT_ID AND a2.ID=f.DESTINATION_AIRPORT_ID ";
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, s1);
+			st.setString(2, s2);
+			ResultSet rs = st.executeQuery();
+			int peso=0;
+			if(rs.next()) {
+				peso=rs.getInt("conta");
+			}
+
+			conn.close();
+			return peso;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Errore connessione al database");
+			throw new RuntimeException("Error Connection Database");
+		}
+	
+		
+		
 	}
 }

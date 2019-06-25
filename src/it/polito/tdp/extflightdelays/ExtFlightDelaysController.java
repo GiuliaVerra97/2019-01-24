@@ -44,10 +44,13 @@ public class ExtFlightDelaysController {
 
     @FXML // fx:id="btnSimula"
     private Button btnSimula; // Value injected by FXMLLoader
-
+    
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	
+    	model.creaGrafo();
+    	txtResult.appendText("GRAFO CREATO");
+    	cmbBoxStati.getItems().addAll(model.getStati());
     }
 
     @FXML
@@ -57,6 +60,17 @@ public class ExtFlightDelaysController {
 
     @FXML
     void doVisualizzaVelivoli(ActionEvent event) {
+    	
+    	if(cmbBoxStati.getValue()==null) {
+    		txtResult.appendText("Selezionare stato");
+    		return;
+    	}
+    	
+    	String stato=cmbBoxStati.getValue();
+    	String s=model.elecoVoli(stato);
+    	txtResult.appendText("Stati collegati a "+stato+"\n");
+    	txtResult.appendText(s);
+    	
 
     }
     
